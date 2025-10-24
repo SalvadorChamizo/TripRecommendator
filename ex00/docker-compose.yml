@@ -1,0 +1,39 @@
+services:
+
+  frontend-service:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    expose:
+      - "5173"
+    volumes:
+      - frontend_dist:/app/dist
+    networks:
+      - backend
+    
+  gateway:
+    build: ./gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - frontend-service
+      - backend-service
+    volumes:
+      - frontend_dist:/usr/share/nginx/html
+    networks:
+      - backend
+
+  backend-service:
+    build: ./backend
+    expose:
+      - "8081"
+    networks:
+      - backend
+
+networks:
+  backend:
+    name: backend
+    driver: bridge
+
+volumes:
+  frontend_dist:
