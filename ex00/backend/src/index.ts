@@ -1,9 +1,12 @@
 import Fastify from "fastify";
 import dotenv from "dotenv";
+import backendRoutes from "./routes/backendRoutes";
 
 dotenv.config();
 
 const app = Fastify({ logger: true });
+
+app.register(backendRoutes);
 
 const PORT = process.env.PORT || 8081;
 
